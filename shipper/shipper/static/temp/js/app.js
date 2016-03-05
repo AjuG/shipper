@@ -8,10 +8,10 @@ var ZOOM = 12;
 
 myApp.config(function ($routeProvider) {
     $routeProvider
-        .when('/', {
-            templateUrl: 'static/temp/html/Main.html',
-            controller: 'mainContrl'
-        })
+    .when('/', {
+        templateUrl: 'static/temp/html/Main.html',
+        controller: 'mainContrl'
+    })
 
     .when('/unassigned', {
         templateUrl: 'static/temp/html/Unassigned.html',
@@ -63,23 +63,39 @@ myApp.controller('cntrl', function ($scope) {
 
     //    $scope.currentJobID = "123";
 
-    $scope.allJobs = allJob_DATA;
+//$scope.allJobs = allJob_DATA;
+
+$scope.allJobs = "";
+    // http://127.0.0.1:8000/jobs/list/
+    $.getJSON( "http://127.0.0.1:8000/jobs/list/", function( data ) {
+        
+
+         var tempArray = JSON.parse(data);
+  console.log(tempArray);
+        $scope.allJobs = tempArray["features"];
+
+        console.log($scope.allJobs);
+
+
+  });
+
+    
 
     console.log("Test");
 
     $scope.tabs = [
-        {
-            title: 'home',
-            url: 'one.tpl.html'
-        }, {
-            title: 'plus',
-            url: 'two.tpl.html'
-        }, {
-            title: 'compass',
-            url: 'three.tpl.html'
+    {
+        title: 'home',
+        url: 'one.tpl.html'
     }, {
-            title: 'user',
-            url: 'four.tpl.html'
+        title: 'plus',
+        url: 'two.tpl.html'
+    }, {
+        title: 'compass',
+        url: 'three.tpl.html'
+    }, {
+        title: 'user',
+        url: 'four.tpl.html'
     }
     ];
 
@@ -99,73 +115,11 @@ myApp.controller('cntrl', function ($scope) {
 
 myApp.controller('homeControl', function ($scope) {
 
-    $scope.cards = [{
-        title: "Challenge Completed!",
-        src: "img/1.jpg",
-        desc: "Nishanth completed a challenge 12hrs ago"
-
-    }, {
-        title: "Invite",
-        src: "img/2.jpg",
-        desc: "Ajay has invited you to a Hangout - Respond ASAP"
-
-    }, {
-        title: "Challenge Completed!",
-        src: "img/2.jpg",
-        desc: "You have completed a challenge 22hrs ago"
-
-    }, {
-        title: "Suggested",
-        src: "img/3.jpg",
-        desc: "Reddy has suggested this hangout"
-
-    }, {
-        title: "Liked",
-        src: "img/4.jpg",
-        desc: "You have liked this hangout - 4hrs ago"
-
-    }, {
-        title: "Invite",
-        src: "img/5.jpg",
-        desc: "Praveen has invited you to a Hangout - Respond ASAP"
-
-    }];
 
 });
 
 //exploreControl
 myApp.controller('exploreControl', function ($scope) {
-
-    $scope.cards = [{
-        title: "Sports Package for 3",
-        src: "http://lorempixel.com/400/200/sports/1",
-        discount: "10%"
-
-    }, {
-        title: "Adventure Package for 2",
-        src: "http://lorempixel.com/400/200/sports/2",
-        discount: "30%"
-    }, {
-        title: "Nature Package for 5",
-        src: "http://lorempixel.com/400/200/nature/1",
-        discount: "15%"
-
-    }, {
-        title: "Surfing Package for 8",
-        src: "http://lorempixel.com/400/200/nature/3",
-        discount: "40%"
-
-    }, {
-        title: "Adventure Package for 10",
-        src: "http://lorempixel.com/400/200/people/3",
-        discount: "5%"
-
-    }, {
-        title: "Adventure Package for 30",
-        src: "http://lorempixel.com/400/200/people/2",
-        discount: "10%"
-
-    }];
 
 });
 
@@ -195,19 +149,19 @@ myApp.controller('interestController', function ($scope) {
 myApp.controller('unassignCntrl', function ($scope, $location) {
 
     $scope.unassignedJobs = [
-        {
-            title: "title1"
-        }, {
-            title: "title1"
-        }, {
-            title: "title1"
-        }, {
-            title: "title1"
-        }, {
-            title: "title1"
-        }, {
-            title: "title1"
-        }
+    {
+        title: "title1"
+    }, {
+        title: "title1"
+    }, {
+        title: "title1"
+    }, {
+        title: "title1"
+    }, {
+        title: "title1"
+    }, {
+        title: "title1"
+    }
     ];
 
     //    alert("tst");

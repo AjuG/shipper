@@ -17,14 +17,15 @@
         </thead>
         <tbody>
             <tr ng-repeat="job in allJobs">
-                <td>{{job.id}}</td>
-                <td>{{job.shipperName}}</td>
-                <td>{{job.pickLoc}}</td>
-                <td>{{job.dropLoc}}</td>
-                <td>{{job.numPorters}}</td>
-                <td>{{job.expTime}}</td>
-                <td>{{job.status}}</td>
-                <td ng-click="onView(job.id)" >View</td>
+            <td>{{job}}</td>
+              {#   <td>{{job.properties.uid}}</td>
+                <td>{{job.properties.shipper}}</td>
+                 <td>{{job.properties.pickLoc}}</td> 
+                 <td>{{job.properties.drop_location}}</td>
+                <td>{{job.properties.porters[0]}}</td>
+                <td>{{job.properties.time_to_reach}}</td>
+                <td>{{job.properties.status}}</td>
+                <td ng-click="onView(job.properties.uid)" >View</td> #}
 
             </tr>
 
