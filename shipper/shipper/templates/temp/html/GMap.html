@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            height: 380px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        function initMap() {
+            //            alert("" + parent.LAT);
+            var myLatLng = {
+                lat: parent.LAT,
+                lng: parent.LONG
+            };
+
+            var myLatLng2 = {
+                lat: parent.LAT - 0.13,
+                lng: parent.LONG - 0.13
+            };
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: parent.ZOOM,
+                center: myLatLng
+            });
+
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'PickUp'
+            });
+
+            var marker2 = new google.maps.Marker({
+                position: myLatLng2,
+                map: map,
+                title: 'Drop'
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrKqWyDsHNZdK4_u7oOuoHmj1FvZhoHos&callback=initMap">
+    </script>
+</body>
+
+</html>
