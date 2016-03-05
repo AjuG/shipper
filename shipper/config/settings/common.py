@@ -33,6 +33,8 @@ DJANGO_APPS = (
 
     # Admin
     'django.contrib.admin',
+    # GIS
+    'django.contrib.gis',
 )
 THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
@@ -45,6 +47,9 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'shipper.users',  # custom users app
     # Your stuff: custom apps go here
+    'jobs',
+    'shippers',
+    'porters',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -102,7 +107,7 @@ DATABASES = {
     'default': env.db("DATABASE_URL", default="postgres:///shipper"),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
-
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
