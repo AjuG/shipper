@@ -27,8 +27,8 @@ class Job(models.Model):
     status = models.IntegerField(default=int(JobStatusEnum.unknown),
                                           choices=STATUS_TYPE,
                                           blank=True, null=True)
-    pickup_location = models.PointField(srid=4326, dim=3)
-    drop_location = models.PointField(srid=4326, dim=3)
+    pickup_location = models.PointField(srid=4326, dim=3, blank=True, null=True)
+    drop_location = models.PointField(srid=4326, dim=3, blank=True, null=True)
     shipper = models.ForeignKey(Shipper)
     porters = models.ManyToManyField(Porter, blank=True, null=True)
     time_to_reach = models.IntegerField()

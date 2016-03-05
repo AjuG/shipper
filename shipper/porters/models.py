@@ -8,6 +8,6 @@ from shipper.users.models import User
 
 
 class Porter(User):
-    current_location = models.PointField(srid=4326, dim=3)
-    rating = models.IntegerField()
-    average_quote = models.IntegerField()
+    current_location = models.PointField(srid=4326, dim=3, blank=True, null=True)
+    rating = models.IntegerField(blank=True, null=True)
+    average_quote = models.IntegerField(blank=True, null=True)
