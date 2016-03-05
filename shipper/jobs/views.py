@@ -1,3 +1,4 @@
+from django.core.serializers import serialize
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
@@ -24,8 +25,10 @@ def job_list(request):
     """
     if request.method == 'GET':
         queryset = Job.objects.all().order_by('-created_at')
-        serializer = JobSerializer(queryset, many=True)
-        return JSONResponse(serializer.data)
+        serializer = serialize('geojson', queryset,
+          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
+        #serializer = JobSerializer(queryset, many=True)
+        return JSONResponse(serializer)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
@@ -43,8 +46,9 @@ def pending_job_list(request):
     """
     if request.method == 'GET':
         queryset = Job.objects.filter(status__in=[0,1]).order_by('-created_at')
-        serializer = JobSerializer(queryset, many=True)
-        return JSONResponse(serializer.data)
+        serializer = serialize('geojson', queryset,
+          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
+        return JSONResponse(serializer)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
@@ -62,8 +66,9 @@ def active_job_list(request):
     """
     if request.method == 'GET':
         queryset = Job.objects.filter(status__in=[2, 3, 4, 5]).order_by('-created_at')
-        serializer = JobSerializer(queryset, many=True)
-        return JSONResponse(serializer.data)
+        serializer = serialize('geojson', queryset,
+          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
+        return JSONResponse(serializer)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
@@ -81,7 +86,8 @@ def complete_job_list(request):
     """
     if request.method == 'GET':
         queryset = Job.objects.filter(status__in=[6]).order_by('-created_at')
-        serializer = JobSerializer(queryset, many=True)
+        serializer = serialize('geojson', queryset,
+          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
         return JSONResponse(serializer.data)
 
     elif request.method == 'POST':
@@ -104,7 +110,8 @@ def job_detail(request, pk):
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = JobSerializer(snippet)
+        serializer = serialize('geojson', snippet,
+          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
         return JSONResponse(serializer.data)
 
     elif request.method == 'PUT':
