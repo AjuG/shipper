@@ -52,32 +52,16 @@ myApp.controller('mainContrl', function ($scope, $location) {
 
 });
 
-myApp.controller('cntrl', function ($scope) {
-    //    $scope.map = {
-    //        center: {
-    //            latitude: 45,
-    //            longitude: -73
-    //        },
-    //        zoom: 8
-    //    };
+myApp.controller('cntrl', function ($scope,$http) {
 
-    //    $scope.currentJobID = "123";
+    $scope.allJobs = "";
 
-//$scope.allJobs = allJob_DATA;
-
-$scope.allJobs = "";
-    // http://127.0.0.1:8000/jobs/list/
-    $.getJSON( "http://127.0.0.1:8000/jobs/list/", function( data ) {
-        
-
-         var tempArray = JSON.parse(data);
-  console.log(tempArray);
-        $scope.allJobs = tempArray["features"];
-
-        console.log($scope.allJobs);
-
-
-  });
+    var postUsers = $http.get('http://127.0.0.1:8000/jobs/list/')
+        postUsers.then(function(result) {
+        console.log(result);
+        console.log("$$$");
+        $scope.allJobs = result.data;
+});
 
     
 
@@ -146,44 +130,24 @@ myApp.controller('interestController', function ($scope) {
 
 
 //selectorCntrl
-myApp.controller('unassignCntrl', function ($scope, $location) {
+myApp.controller('unassignCntrl', function ($scope, $location, $http) {
 
-    $scope.unassignedJobs = [
-    {
-        title: "title1"
-    }, {
-        title: "title1"
-    }, {
-        title: "title1"
-    }, {
-        title: "title1"
-    }, {
-        title: "title1"
-    }, {
-        title: "title1"
-    }
-    ];
+    $scope.unassignedJobs = "";
 
+    var postUsers = $http.get('http://127.0.0.1:8000/jobs/pending/')
+    postUsers.then(function(result) {
+    console.log(result);
+    $scope.unassignedJobs = result.data;
+    console.log($scope.unassignedJobs);
+
+    });
+    });
     //    alert("tst");
     //    $("#ex2").slider({});
     //    $("#ex3").slider({});
     //
     //    $(".date-picker").datepicker();
 
-    $(".date-picker").on("change", function () {
-        var id = $(this).attr("id");
-        var val = $("label[for='" + id + "']").text();
-        //$("#msg").text(val + " changed");
-    });
-
-    $scope.onNext = function () {
-        alert("clicked");
-        $location.path('/suggest');
-    }
-
-
-
-});
 
 
 myApp.controller('detailsCntrl', function ($scope) {
