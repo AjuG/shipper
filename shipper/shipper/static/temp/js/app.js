@@ -18,6 +18,15 @@ myApp.config(function ($routeProvider) {
         controller: 'unassignCntrl'
     })
 
+    .when('/active', {
+        templateUrl: 'static/temp/html/Active.html',
+        controller: 'activeCntrl'
+    })
+
+    .when('/completed', {
+        templateUrl: 'static/temp/html/Completed.html',
+        controller: 'completedCntrl'
+    })
 
     .when('/jobDetails', {
         templateUrl: 'static/temp/html/JobDetails.html',
@@ -124,12 +133,7 @@ myApp.controller('interestController', function ($scope) {
 
 
 
-
-
-
-
-
-//selectorCntrl
+//unassignCntrl
 myApp.controller('unassignCntrl', function ($scope, $location, $http) {
 
     $scope.unassignedJobs = "";
@@ -142,17 +146,32 @@ myApp.controller('unassignCntrl', function ($scope, $location, $http) {
 
     });
     });
-    //    alert("tst");
-    //    $("#ex2").slider({});
-    //    $("#ex3").slider({});
-    //
-    //    $(".date-picker").datepicker();
 
+myApp.controller('activeCntrl', function ($scope, $location, $http) {
 
+    $scope.activeJobs = "";
+
+    var postUsers = $http.get('http://127.0.0.1:8000/jobs/active/')
+    postUsers.then(function(result) {
+    $scope.activeJobs = result.data;
+
+    });
+    });
+
+myApp.controller('completedCntrl', function ($scope, $location, $http) {
+
+    $scope.completedJobs = "";
+
+    var postUsers = $http.get('http://127.0.0.1:8000/jobs/complete/')
+    postUsers.then(function(result) {
+    console.log(result);
+    $scope.completedJobs = result.data;
+    console.log($scope.completedJobs);
+
+    });
+    });
 
 myApp.controller('detailsCntrl', function ($scope) {
-
-
 
 
 });
