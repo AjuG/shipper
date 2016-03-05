@@ -1,3 +1,5 @@
+import json
+
 from django.core.serializers import serialize
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -25,10 +27,29 @@ def job_list(request):
     """
     if request.method == 'GET':
         queryset = Job.objects.all().order_by('-created_at')
-        serializer = serialize('geojson', queryset,
-          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
+        data = list()
+        for job in queryset:
+            try:
+                pickup_json = json.loads(job.pickup_location.json)
+            except:
+                pickup_json = 'null'
+            try:
+                drop_json = json.loads(job.drop_location.json)
+            except:
+                drop_json = 'null'
+            data_dict = {"uid":job.uid, 
+                    'status': job.status, 
+                    'pickup_location': pickup_json, 
+                    'drop_location': drop_json,
+                    'shipper': job.shipper.id,
+                    'porters': job.porters.values_list('pk', flat=True),
+                    'time_to_reach': job.time_to_reach,
+                    'amount_offered': job.amount_offered,
+                    'created_at': job.created_at
+                    }
+            data.append(data_dict)
         #serializer = JobSerializer(queryset, many=True)
-        return JSONResponse(serializer)
+        return JSONResponse(data)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
@@ -46,9 +67,28 @@ def pending_job_list(request):
     """
     if request.method == 'GET':
         queryset = Job.objects.filter(status__in=[0,1]).order_by('-created_at')
-        serializer = serialize('geojson', queryset,
-          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
-        return JSONResponse(serializer)
+        data = list()
+        for job in queryset:
+            try:
+                pickup_json = json.loads(job.pickup_location.json)
+            except:
+                pickup_json = 'null'
+            try:
+                drop_json = json.loads(job.drop_location.json)
+            except:
+                drop_json = 'null'
+            data_dict = {"uid":job.uid, 
+                    'status': job.status, 
+                    'pickup_location': pickup_json, 
+                    'drop_location': drop_json,
+                    'shipper': job.shipper.id,
+                    'porters': job.porters.values_list('pk', flat=True),
+                    'time_to_reach': job.time_to_reach,
+                    'amount_offered': job.amount_offered,
+                    'created_at': job.created_at
+                    }
+            data.append(data_dict)
+        return JSONResponse(data)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
