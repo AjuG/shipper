@@ -1,0 +1,33 @@
+<h2 class="sub-header">All Available Jobs</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Shipper Name</th>
+                <th>PickUp Location</th>
+                <th>Drop Location</th>
+                <th>Number of Porters</th>
+                <th>Expected Time</th>
+                <th>Status</th>
+                <th>View</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="job in allJobs">
+                <td>{{job.id}}</td>
+                <td>{{job.shipperName}}</td>
+                <td>{{job.pickLoc}}</td>
+                <td>{{job.dropLoc}}</td>
+                <td>{{job.numPorters}}</td>
+                <td>{{job.expTime}}</td>
+                <td>{{job.status}}</td>
+                <td ng-click="onView(job.id)" >View</td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
