@@ -7,4 +7,4 @@ from shipper.users.models import User
 
 
 class Shipper(User):
-    shipper_location = models.PointField(srid=4326, dim=3)
+    shipper_location = models.PointField(srid=4326, dim=3, blank=True, null=True)
