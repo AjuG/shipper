@@ -25,13 +25,13 @@
         function initMap() {
             //            alert("" + parent.LAT);
             var myLatLng = {
-                lat: parent.LAT,
-                lng: parent.LONG
+                lat: parent.LAT_PICK,
+                lng: parent.LONG_PICK
             };
-
+            console.log(myLatLng)
             var myLatLng2 = {
-                lat: parent.LAT - 0.13,
-                lng: parent.LONG - 0.13
+                lat: parent.LAT_DROP,
+                lng: parent.LONG_DROP
             };
 
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -42,13 +42,15 @@
             var marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,
-                title: 'PickUp'
+                title: 'PickUp',
+                label: 'Pick',
             });
 
             var marker2 = new google.maps.Marker({
                 position: myLatLng2,
                 map: map,
-                title: 'Drop'
+                title: 'Drop',
+                label: 'Drop'
             });
         }
     </script>
