@@ -4,6 +4,43 @@
         /*        border: 1px solid black;*/
         padding: 0px;
     }
+    
+    .tabUL {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .tabLI {
+        float: left;
+        border: 1px solid #000;
+        border-bottom-width: 0;
+        margin: 3px 3px 0px 3px;
+        padding: 5px 5px 0px 5px;
+        background-color: #CCC;
+        color: #696969;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        margin-bottom: 30px;
+        padding: 12px;
+    }
+    
+    #mainView {
+        /*        border: 1px solid black;*/
+        clear: both;
+        padding: 0 1em;
+    }
+    
+    .active {
+        background-color: #FFF;
+        color: #000;
+    }
+    
+    .profPic {
+        height: 80px;
+        width: 80px;
+        border-radius: 60px;
+    }
 </style>
 <script>
     var lat = 10;
@@ -15,38 +52,111 @@
 
             <br>
 
-            <div class="col-md-12">
-
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Shipper Name</th>
-                            <th>PickUp Location</th>
-                            <th>Drop Location</th>
-                            <th>Number of Porters</th>
-                            <th>Expected Time</th>
-                            <th>Status</th>
-                            <th>View</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="job in allJobs">
-                            <td>{{job.id}}</td>
-                            <td>{{job.shipperName}}</td>
-                            <td>{{job.pickLoc}}</td>
-                            <td>{{job.dropLoc}}</td>
-                            <td>{{job.numPorters}}</td>
-                            <td>{{job.expTime}}</td>
-                            <td>{{job.status}}</td>
-                            <td ng-click="onView(job.id)">View</td>
-
-                        </tr>
-
-                    </tbody>
-                </table>
+            <div id="tabs">
+                <ul class="tabUL">
+                    <li class="tabLI" ng-repeat="tab in tabs" ng-class="{active:isActiveTab(tab.url)}" ng-click="onClickTab(tab)">{{tab.title}} <span class="badge">4</span></li>
+                </ul>
+                <div id="mainView">
+                    <div ng-include="currentTab"></div>
+                </div>
             </div>
+            <script type="text/ng-template" id="one.tpl.html">
+                <div id="viewOne">
+                    <div class="col-md-12">
+
+                        <table class="table table-striped">
+
+                            <tbody>
+                                <tr>
+                                    <td>Job ID</td>
+                                    <td>{{jobDetail.uid}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Job Status</td>
+                                    <td>{{jobDetail.status}}</td>
+                                </tr>
+                                <tr>
+                                    <td>PickUp Location</td>
+                                    <td>{{jobDetail.pickup_location['coordinates'][0]}}, {{jobDetail.pickup_location['coordinates'][1]}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Drop Location</td>
+                                    <td>{{jobDetail.drop_location['coordinates'][0]}}, {{jobDetail.drop_location['coordinates'][1]}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Shipper Name</td>
+                                    <td>{{jobDetail.shipper}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Porters</td>
+                                    <td>{{jobDetail.porters}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Time to reach</td>
+                                    <td>{{jobDetail.time_to_reach}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Amount Offered</td>
+                                    <td>{{jobDetail.amount_offered}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Created at</td>
+                                    <td>{{jobDetail.created_at}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </script>
+
+            <script type="text/ng-template" id="two.tpl.html">
+                <div id="viewTwo">
+                    <table class="table table-striped">
+
+                        <tbody>
+                            <tr ng-repeat="job in allJobs">
+
+                                <div class="col-md-12">
+                                    <div class="col-md-3"><img class="profPic" src="http://lorempixel.com/400/200/people/" alt=""></div>
+                                    <div class="col-md-5">
+                                        1234
+                                        <br> Shipper Name
+                                        <br> RT Nagar
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <div>0.5 km</div>
+                                            Distance
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div>150 Rs/hr</div>
+                                            Salary
+                                        </div>
+
+                                    </div>
+                                    <br>
+                                    <div class="col-md-12">
+
+                                        <button class="btn btn-success">Accept</button>
+                                        <button class="btn btn-danger">Reject</button>
+
+                                    </div>
+
+                                </div>
+
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </script>
+
+
 
         </div>
 
@@ -61,6 +171,10 @@
         <div class="col-md-12">
 
             Controls
+
+            <br>
+
+            <button>Search Porters</button>
         </div>
     </div>
 </div>
