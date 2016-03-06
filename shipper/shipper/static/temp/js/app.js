@@ -2,8 +2,10 @@ var myApp = angular.module('shipper', ['ngRoute']);
 
 var jobID = "123";
 
-var LAT = 12.9667;
-var LONG = 77.5667;
+var LAT_PICK = 0;
+var LONG_PICK = 0;
+var LAT_DROP = 0;
+var LONG_DROP = 0;
 var ZOOM = 12;
 
 myApp.config(function ($routeProvider) {
@@ -49,7 +51,14 @@ myApp.service('upload', function ($http) {
 });
 
 myApp.controller('mainContrl', function ($scope, $location) {
-    $scope.onView = function (id) {
+    $scope.onView = function (id,pickUp,dropLoc) {
+        jobID = id;
+        LAT_PICK = pickUp.coordinates[0];
+        LONG_PICK = pickUp.coordinates[1];
+
+        LAT_DROP = dropLoc.coordinates[0];
+        LONG_DROP = dropLoc.coordinates[1];
+
         //        $(this).attr("jobid");
         //        alert("test "+jobID+"   "+id);
         $location.path('/jobDetails');
@@ -67,8 +76,6 @@ myApp.controller('cntrl', function ($scope,$http) {
 
     var postUsers = $http.get('http://127.0.0.1:8000/jobs/list/')
         postUsers.then(function(result) {
-        console.log(result);
-        console.log("$$$");
         $scope.allJobs = result.data;
 });
 
@@ -164,14 +171,39 @@ myApp.controller('completedCntrl', function ($scope, $location, $http) {
 
     var postUsers = $http.get('http://127.0.0.1:8000/jobs/complete/')
     postUsers.then(function(result) {
-    console.log(result);
     $scope.completedJobs = result.data;
-    console.log($scope.completedJobs);
 
     });
     });
 
-myApp.controller('detailsCntrl', function ($scope) {
+
+myApp.controller('detailsCntrl', function ($scope, $http) {
+    $scope.jobDetail =""
+    var postUsers = $http.get('http://127.0.0.1:8000/jobs/detail/'+jobID);
+    postUsers.then(function(result) {
+    $scope.jobDetail = result.data;
+    });
+
+
+    $scope.tabs = [{
+        title: 'Job Detail',
+        url: 'one.tpl.html'
+        }, {
+        title: 'Available Porters ',
+        url: 'two.tpl.html'
+        }];
+
+    $scope.currentTab = 'one.tpl.html';
+
+    $scope.onClickTab = function (tab) {
+        $scope.currentTab = tab.url;
+    }
+
+    $scope.isActiveTab = function (tabUrl) {
+        return tabUrl == $scope.currentTab;
+    }
+
+    $scope.allJobs = allJob_DATA;
 
 
 });
