@@ -1,0 +1,33 @@
+<h2 class="sub-header">All Active Jobs</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Shipper Name</th>
+                <th>PickUp Location</th>
+                <th>Drop Location</th>
+                <th>PorterID</th>
+                <th>Expected Time</th>
+                <th>Status</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="job in activeJobs">
+            
+              <td>{{job.uid}}</td>
+                <td>{{job.shipper}}</td>
+                 <td>{{job.pickup_location.coordinates[0]}}, {{job.pickup_location.coordinates[1]}}</td> 
+                 <td>{{job.drop_location.coordinates[0]}}, {{job.drop_location.coordinates[1]}}</td>
+                <td>{{job.porters[0]}}</td>
+                <td>{{job.time_to_reach}}</td>
+                <td>{{job.status}}</td>
+                <td><button class="btn btn-default"ng-click="onView(job.properties.uid)">View</button></td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
