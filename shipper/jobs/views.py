@@ -9,6 +9,7 @@ from rest_framework.parsers import JSONParser
 from jobs.models import Job
 from jobs.serializers import JobSerializer
 
+from porters.models import Porter
 
 class JSONResponse(HttpResponse):
     """
@@ -37,8 +38,12 @@ def job_list(request):
                 drop_json = json.loads(job.drop_location.json)
             except:
                 drop_json = 'null'
+            if job.status in [6]:
+                job_status = 'Fulfilled'
+            else:
+                job_status = 'Pending'
             data_dict = {"uid":job.uid, 
-                    'status': job.status, 
+                    'status': job_status, 
                     'pickup_location': pickup_json, 
                     'drop_location': drop_json,
                     'shipper': job.shipper.id,
@@ -78,7 +83,7 @@ def pending_job_list(request):
             except:
                 drop_json = 'null'
             data_dict = {"uid":job.uid, 
-                    'status': job.status, 
+                    'status': 'Pending', 
                     'pickup_location': pickup_json, 
                     'drop_location': drop_json,
                     'shipper': job.shipper.id,
@@ -117,7 +122,7 @@ def active_job_list(request):
             except:
                 drop_json = 'null'
             data_dict = {"uid":job.uid, 
-                    'status': job.status, 
+                    'status': 'Pending', 
                     'pickup_location': pickup_json, 
                     'drop_location': drop_json,
                     'shipper': job.shipper.id,
@@ -156,7 +161,7 @@ def complete_job_list(request):
             except:
                 drop_json = 'null'
             data_dict = {"uid":job.uid, 
-                    'status': job.status, 
+                    'status': 'Fulfilled', 
                     'pickup_location': pickup_json, 
                     'drop_location': drop_json,
                     'shipper': job.shipper.id,
@@ -178,19 +183,36 @@ def complete_job_list(request):
 
 
 @csrf_exempt
-def job_detail(request, pk):
+def job_detail(request, uid):
     """
     Retrieve, update or delete a job.
     """
     try:
-        snippet = Job.objects.get(pk=pk)
+        job = Job.objects.get(uid=uid)
     except Job.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = serialize('geojson', snippet,
-          fields=('uid', 'status', 'pickup_location', 'drop_location', 'shipper', 'porters', 'time_to_reach', 'amount_offered', 'created_at'))
-        return JSONResponse(serializer.data)
+        try:
+            pickup_json = json.loads(job.pickup_location.json)
+        except:
+            pickup_json = 'null'
+        try:
+            drop_json = json.loads(job.drop_location.json)
+        except:
+            drop_json = 'null'
+        data_dict = {"uid":job.uid, 
+                'status': job.status, 
+                'pickup_location': pickup_json, 
+                'drop_location': drop_json,
+                'shipper': job.shipper.id,
+                'porters': job.porters.values_list('pk', flat=True),
+                'time_to_reach': job.time_to_reach,
+                'amount_offered': job.amount_offered,
+                'created_at': job.created_at
+                }
+        print data_dict
+        return JSONResponse(data_dict)
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
@@ -203,3 +225,32 @@ def job_detail(request, pk):
     elif request.method == 'DELETE':
         snippet.delete()
         return HttpResponse(status=204)
+
+
+@csrf_exempt
+def get_available_porter(request, job_uid, search_radius):
+    try:
+        job = Job.objects.get(pk=job_uid)
+    except Job.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        if job.status in [0,1,2,3]: #in job status
+            destination = job.pickup_location
+        else:
+            destination = job.drop_location
+        nearby_porters = Porter.objects.filter(
+            current_location__dwithin=(destination, 0.01*int(search_radius))
+        )
+        data = list()
+        for porter in nearby_porters:
+            distance = destination.distance(porter.current_location)
+            data_dict = {
+                'name': porter.name,
+                'phone': porter.phone,
+                'rating': porter.rating,
+                'average_quote': porter.average_quote,
+                'distance': distance,
+            }
+            data.append(data_dict)
+        return JSONResponse(data_dict)
